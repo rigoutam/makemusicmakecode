@@ -1,8 +1,34 @@
+// A set of Sequences
+class SequenceSet {
+    sequences: Sequence[];
+    constructor(sequences: Sequence[]) {
+        this.sequences = sequences;
+    }
+
+    // Calls next on all its sequences
+    public next() {
+        for (let i = 0; i < this.sequences.length; i++) {
+            let sequence = this.sequences[i];
+            if (sequence.hasNext()) {
+                sequence.next();
+            }
+        }
+    }
+
+    // Resets all sequences to start at their beginnings
+    public resetAll(): void {
+        for (let i = 0; i < this.sequences.length; i++) {
+            this.sequences[i].reset();
+            
+        }
+    }
+}
+
 // Takes in a pattern, function, and rate
 // Calls the function when pattern is on
 // - represents off
 // # represents on
-export class Sequence {
+class Sequence {
     pattern: string;
     callback: () => void;
     repeat: boolean;
@@ -13,7 +39,7 @@ export class Sequence {
 
     constructor(pattern: string, callback: () => void, 
     repeat: boolean=true, on: string ="#", off: string = "-") {
-        this.pattern = pattern;
+        this.pattern = pattern.replace(/\s/g, '');
         this.callback = callback;
         this.repeat = repeat;
         this.on = on;
@@ -24,6 +50,8 @@ export class Sequence {
     public next(): boolean {
         if (this.hasNext()) {
             let p = this.pattern.charAt(this.index);
+            this.index++;
+
             if (p === this.on) {
                 this.callback();
                 return true;
@@ -34,6 +62,10 @@ export class Sequence {
                 return false;
             }
         }
+    }
+
+    public reset(): void {
+        this.index = 0;
     }
 
     // Always true if repeating the pattern
