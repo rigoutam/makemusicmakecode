@@ -1,6 +1,6 @@
-import {Sequence, ISequence} from "./Sequence";
+import {Sequence} from "./Sequence";
 
-export class Percussion implements ISequence {
+export class Percussion {
     pitch: number;
     length: number;
     sequence: Sequence;
