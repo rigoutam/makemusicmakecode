@@ -1,3 +1,19 @@
+// A Sequence Factory
+class SequenceFactory {
+    repeat: boolean;
+    on: string;
+    off: string;
+    constructor(repeat: boolean = true, on: string = "#", off: string = "-") {
+        this.repeat = repeat;
+        this.on = on;
+        this.off = off;
+    }
+    
+    public createSequence(pattern: string, callback: () => void): Sequence {
+        return new Sequence(pattern, callback, this.repeat, this.on, this.off);
+    }
+}
+
 // A set of Sequences
 class SequenceSet {
     sequences: Sequence[];
