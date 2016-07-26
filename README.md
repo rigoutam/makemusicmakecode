@@ -15,3 +15,10 @@ As time permits, we will create curriculum, such as:
 - Science: waves, frequency, interference, circuits...
 - Code: Types, Variables, math operators, Loops, Logic, Functions, Map, Array.
 
+## License
+
+MIT
+
+## Supported targets
+
+* for PXT/microbit
