@@ -47,6 +47,7 @@ class Sequence {
     }
 
     // Does the next thing in the sequence
+    // Returns whether it did the on thing
     public next(): boolean {
         if (this.hasNext()) {
             let p = this.pattern.charAt(this.index);
@@ -61,6 +62,8 @@ class Sequence {
                 // ignores bad input
                 return false;
             }
+        } else {
+            return false;
         }
     }
 
