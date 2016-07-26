@@ -39,7 +39,13 @@ class Sequence {
 
     constructor(pattern: string, callback: () => void, 
     repeat: boolean=true, on: string ="#", off: string = "-") {
-        this.pattern = pattern.replace(/\s/g, '');
+        let stripped = "";
+        for (let i = 0; i < pattern.length; i++) {
+            if (pattern[i] !== " ") {
+                stripped += pattern[i];
+            }
+        }
+        this.pattern = stripped;
         this.callback = callback;
         this.repeat = repeat;
         this.on = on;
