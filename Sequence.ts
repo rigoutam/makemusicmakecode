@@ -8,7 +8,7 @@ class SequenceFactory {
         this.on = on;
         this.off = off;
     }
-    
+
     public createSequence(pattern: string, callback: () => void): Sequence {
         return new Sequence(pattern, callback, this.repeat, this.on, this.off);
     }
@@ -35,7 +35,7 @@ class SequenceSet {
     public resetAll(): void {
         for (let i = 0; i < this.sequences.length; i++) {
             this.sequences[i].reset();
-            
+
         }
     }
 }
@@ -53,8 +53,8 @@ class Sequence {
     on: string;
     off: string;
 
-    constructor(pattern: string, callback: () => void, 
-    repeat: boolean=true, on: string ="#", off: string = "-") {
+    constructor(pattern: string, callback: () => void,
+        repeat: boolean = true, on: string = "#", off: string = "-") {
         let stripped = "";
         for (let i = 0; i < pattern.length; i++) {
             if (pattern[i] !== " ") {
