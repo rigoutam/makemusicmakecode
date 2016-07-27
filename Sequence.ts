@@ -21,19 +21,20 @@ class SequenceSet {
         this.sequences = sequences;
     }
 
-    // Returns the next sequence
+    // Returns the sequence whose next beat is 'on'
     public next(): Sequence {
+        let returnSequence: Sequence = null;
         for (let i = 0; i < this.sequences.length; i++) {
             let sequence = this.sequences[i];
             if (sequence.hasNext()) {
-                sequence.next();
                 if (sequence.isNextOn()) {
-                    return sequence;
+                    returnSequence = sequence;
                 }
-
+                sequence.next();
             }
         }
-        return null;
+
+        return returnSequence;
     }
 
     // Resets all sequences to start at their beginnings
@@ -76,6 +77,9 @@ class Sequence {
         if (this.hasNext()) {
             let p = this.pattern.charAt(this.index);
             this.index++;
+            if (this.repeat) {
+                this.index = this.index % this.pattern.length;
+            }
 
             if (p === this.on) {
                 return true;
@@ -109,34 +113,19 @@ class Sequence {
 let f = new SequenceFactory(true, "#", "-");
 let a = f.createSequence("#-#-");
 let b = f.createSequence("-#-#");
-let set = new SequenceSet([a]);
+let set = new SequenceSet([a, b]);
 input.onButtonPressed(Button.A, () => {
     let seq = set.next();
     if (seq === a) {
-        music.playTone(100, 1000);
-        basic.showLeds(`
-            . . # . .
-            . . . . .
-            . . # . .
-            . . . . .
-            . . . . .
-            `)
+        basic.showString("A")
+        music.playTone(1100, 1000);
+
     } else if (seq === b) {
-        music.playTone(200, 200);
-        basic.showLeds(`
-            . . # . .
-            . . . . .
-            . . # . .
-            . . . . .
-            . . # . .
-            `)
-    } else {
-        basic.showLeds(`
-            . . . . .
-            . . . . .
-            . . # . .
-            . . . . .
-            . . . . .
-            `)
+        basic.showString("B")
+        music.playTone(200, 1000);
+
+    } else if (seq === null) {
+        basic.showString("X")
     }
 });
+
