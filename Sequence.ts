@@ -9,8 +9,8 @@ class SequenceFactory {
         this.off = off;
     }
 
-    public createSequence(pattern: string, callback: () => void): Sequence {
-        return new Sequence(pattern, callback, this.repeat, this.on, this.off);
+    public createSequence(pattern: string): Sequence {
+        return new Sequence(pattern, this.repeat, this.on, this.off);
     }
 }
 
@@ -21,21 +21,25 @@ class SequenceSet {
         this.sequences = sequences;
     }
 
-    // Calls next on all its sequences
-    public next() {
+    // Returns the next sequence
+    public next(): Sequence {
         for (let i = 0; i < this.sequences.length; i++) {
             let sequence = this.sequences[i];
             if (sequence.hasNext()) {
                 sequence.next();
+                if (sequence.isNextOn()) {
+                    return sequence;
+                }
+
             }
         }
+        return null;
     }
 
     // Resets all sequences to start at their beginnings
     public resetAll(): void {
         for (let i = 0; i < this.sequences.length; i++) {
             this.sequences[i].reset();
-
         }
     }
 }
@@ -46,15 +50,13 @@ class SequenceSet {
 // # represents on
 class Sequence {
     pattern: string;
-    callback: () => void;
     repeat: boolean;
 
     index: number;
     on: string;
     off: string;
 
-    constructor(pattern: string, callback: () => void,
-        repeat: boolean = true, on: string = "#", off: string = "-") {
+    constructor(pattern: string, repeat: boolean = true, on: string = "#", off: string = "-") {
         let stripped = "";
         for (let i = 0; i < pattern.length; i++) {
             if (pattern[i] !== " ") {
@@ -62,7 +64,6 @@ class Sequence {
             }
         }
         this.pattern = stripped;
-        this.callback = callback;
         this.repeat = repeat;
         this.on = on;
         this.off = off;
@@ -70,13 +71,13 @@ class Sequence {
 
     // Does the next thing in the sequence
     // Returns whether it did the on thing
+    // TODO we can't actually call this now cause no callbacks work in PXT
     public next(): boolean {
         if (this.hasNext()) {
             let p = this.pattern.charAt(this.index);
             this.index++;
 
             if (p === this.on) {
-                this.callback();
                 return true;
             } else if (p === this.off) {
                 return false;
@@ -103,3 +104,39 @@ class Sequence {
         return this.hasNext() && this.pattern.charAt(this.index) === this.on;
     }
 }
+
+// Usage
+let f = new SequenceFactory(true, "#", "-");
+let a = f.createSequence("#-#-");
+let b = f.createSequence("-#-#");
+let set = new SequenceSet([a]);
+input.onButtonPressed(Button.A, () => {
+    let seq = set.next();
+    if (seq === a) {
+        music.playTone(100, 1000);
+        basic.showLeds(`
+            . . # . .
+            . . . . .
+            . . # . .
+            . . . . .
+            . . . . .
+            `)
+    } else if (seq === b) {
+        music.playTone(200, 200);
+        basic.showLeds(`
+            . . # . .
+            . . . . .
+            . . # . .
+            . . . . .
+            . . # . .
+            `)
+    } else {
+        basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . # . .
+            . . . . .
+            . . . . .
+            `)
+    }
+});
