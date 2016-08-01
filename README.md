@@ -13,5 +13,12 @@ We will create basic instructions on building hardware and creating and modifyin
 As time permits, we will create curriculum, such as:
 - Music: Scale, tone, beat...
 - Science: waves, frequency, interference, circuits...
-- Code: Types, Variables, math operators, Loops, Logic, Functions, Map, Array
+- Code: Types, Variables, math operators, Loops, Logic, Functions, Map, Array.
 
+## License
+
+MIT
+
+## Supported targets
+
+* for PXT/microbit
